@@ -8,6 +8,7 @@ from flask_login import current_user, login_required
 
 tickets = Blueprint('tickets', 'tickets')
 
+#index, GET route
 @tickets.route('/', methods=['GET'])
 
 def tickets_index():
@@ -25,3 +26,21 @@ def tickets_index():
 		'status': 200
 		}), 200
 
+
+#create,POST route
+@tickets.route('/', methods=['POST'])
+#@login_required
+
+def create_ticket():
+	payload = request.get_json()
+
+	new_ticket = models.Ticket.create(assignedto=payload['AssignedTo'], description=payload['Description'], notes=payload['Notes'])
+	print(new_ticket)
+
+	ticket_dict = model_to_dict(new_ticket)
+
+	return jsonify(
+		data=ticket_dict,
+		message='Successfully created new ticket',
+		status=201
+		), 201

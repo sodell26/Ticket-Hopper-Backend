@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 
-# from resources.tickets import tickets
+from resources.tickets import tickets
 # from resources.users import users
 
 import models
@@ -28,6 +28,8 @@ PORT = os.environ.get("PORT_FLASK")
 # @login_manager.user_loader
 
 app = Flask(__name__)
+
+app.register_blueprint(tickets, url_prefix='/api/v1/tickets')
 
 @app.route('/')
 def index():
