@@ -71,6 +71,19 @@ def show_one_ticket(id):
 	), 200
 
 
+#delete route
+@tickets.route('/<id>', methods=['DELETE'])
+def delete_ticket(id):
+
+	models.Ticket.delete().where(models.Ticket.id==id).execute()
+
+	return jsonify(
+		data = None,
+		message='ticket deleted',
+		status=200
+	), 200
+
+
 
 
 	
