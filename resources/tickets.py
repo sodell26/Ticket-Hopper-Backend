@@ -59,6 +59,18 @@ def edit_one_ticket(id):
 		),200
 
 
+#show/GET route
+@tickets.route('/<id>', methods=['GET'])
+def show_one_ticket(id):
+	ticket = models.Ticket.get_by_id(id)
+
+	return jsonify(
+		data = model_to_dict(ticket),
+		message = "showing one ticket",
+		status = 200
+	), 200
+
+
 
 
 	
