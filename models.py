@@ -7,12 +7,12 @@ from flask_login import UserMixin
 DATABASE = SqliteDatabase('tickets.sqlite') # change to 
 
 class Ticket(Model):
-	AssignedTo: CharField() # change to a Foreign key after testing
-	Description: CharField()
-	SubmittedBy: CharField() # change to a Foreign key after testing
-	Notes: CharField()
-	Open: BooleanField()
-	Created: DateTimeField(default=datetime.datetime.now)
+	assigned_to = CharField() # change to a Foreign key after testing
+	description = CharField()
+	submitted_by = CharField(null = True) # change to a Foreign key after testing
+	notes = CharField()
+	open_ticket = BooleanField(default=True)
+	created = DateTimeField(default=datetime.datetime.now)
 
 	class Meta:
 		database = DATABASE

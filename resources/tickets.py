@@ -15,11 +15,11 @@ def tickets_index():
 	result = models.Ticket.select()
 	print(result)
 
-	ticket_dicts = []
 	for ticket in result:
-		ticket_dict = model_to_dict(ticket)
-		ticket_dicts.append(ticket_dict)
+		print(ticket.__data__)
 
+	ticket_dicts = [model_to_dict(ticket) for ticket in result]
+	# print(ticket_dicts)
 	return jsonify({
 		'data': ticket_dicts,
 		'message': f"Successfully found {len(ticket_dicts)} tickets",
@@ -34,7 +34,7 @@ def tickets_index():
 def create_ticket():
 	payload = request.get_json()
 
-	new_ticket = models.Ticket.create(assignedto=payload['AssignedTo'], description=payload['Description'], notes=payload['Notes'])
+	new_ticket = models.Ticket.create(assigned_to=payload['assigned_to'], description=payload['description'], notes=payload['notes'])
 	print(new_ticket)
 
 	ticket_dict = model_to_dict(new_ticket)
@@ -44,3 +44,57 @@ def create_ticket():
 		message='Successfully created new ticket',
 		status=201
 		), 201
+
+
+
+#update/PUT route
+@tickets.route('/<id>', methods=['PUT'])
+def edit_one_ticket(id):
+	payload = request.get_json()
+	models.Ticket.update(**payload).where(models.Ticket.id == id).execute()
+	return jsonify(
+		data=model_to_dict(models.Ticket.get_by_id(id)),
+		message="Successfully updated ticket",
+		status=200
+		),200
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
