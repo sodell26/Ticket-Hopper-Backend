@@ -17,7 +17,7 @@ class Ticket(Model):
 	class Meta:
 		database = DATABASE
 
-
+#stretch - outside customers
 # class Customer(userMixin, Model):
 # 	username=CharField(unique=True)
 # 	email=CharField(unique=True)
@@ -25,7 +25,16 @@ class Ticket(Model):
 # 	tickets=ForeignKeyField(Ticket, backref=)
 
 
+class TeamMember(UserMixin, Model):
+	username = CharField(unique=True)
+	email = CharField(unique=True)
+	password = CharField()
+	#Teams: have the Teams model refer back to this
+	#Tickets: same with this one
+	Manager = BooleanField(default=False) 
 
+	class Meta:
+		database = DATABASE
 
 
 
@@ -34,7 +43,7 @@ class Ticket(Model):
 def initialize():
 	DATABASE.connect()
 
-	DATABASE.create_tables([Ticket], safe=True)
+	DATABASE.create_tables([TeamMember, Ticket], safe=True)
 	print("Connected to DB and created tables if needed")
 
 	DATABASE.close()
