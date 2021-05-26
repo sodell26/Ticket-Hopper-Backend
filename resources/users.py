@@ -70,11 +70,22 @@ def login():
 	payload['email'] = payload['email'].lower()
 
 	try:
-		user = models.TeamMember.get(models.TeamMember.email == payload['email']) 
+		if (models.TeamMember.get(models.TeamMember.email == payload['email']) and models.TeamMember.get(models.TeamMember.username == payload['username'])):
 
-		user_dict = model_to_dict(user)
+			user = models.TeamMember.get(models.TeamMember.username == payload['username'])
 
-		password_matches = check_password_hash(user_dict['password'], payload['password'])
+			user_dict = model_to_dict(user)
+
+			password_matches = check_password_hash(user_dict['password'], payload['password'])
+
+		else:
+			print('username or email does not match records')
+
+			return jsonify(
+				data = {},
+				message = "Username and Email combination does not match any profiles",
+				status = 401
+			), 401
 
 		if (password_matches):
 			login_user(user)
