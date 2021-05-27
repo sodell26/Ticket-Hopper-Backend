@@ -6,8 +6,20 @@ from flask_login import UserMixin
 
 DATABASE = SqliteDatabase('tickets.sqlite') # change to 
 
+class TeamMember(UserMixin, Model):
+	username = CharField(unique=True)
+	email = CharField(unique=True)
+	password = CharField()
+	#Teams: have the Teams model refer back to this
+	#Tickets: same with this one
+	Manager = BooleanField(default=False) 
+
+	class Meta:
+		database = DATABASE
+		
+
 class Ticket(Model):
-	assigned_to = CharField() # change to a Foreign key after testing
+	assigned_to = ForeignKeyField(TeamMember, backref = 'my_tickets') # change to a Foreign key after testing
 	description = CharField()
 	submitted_by = CharField(null = True) # change to a Foreign key after testing
 	notes = CharField()
@@ -23,21 +35,6 @@ class Ticket(Model):
 # 	email=CharField(unique=True)
 # 	password=CharField()
 # 	tickets=ForeignKeyField(Ticket, backref=)
-
-
-class TeamMember(UserMixin, Model):
-	username = CharField(unique=True)
-	email = CharField(unique=True)
-	password = CharField()
-	#Teams: have the Teams model refer back to this
-	#Tickets: same with this one
-	Manager = BooleanField(default=False) 
-
-	class Meta:
-		database = DATABASE
-
-
-
 
 
 def initialize():

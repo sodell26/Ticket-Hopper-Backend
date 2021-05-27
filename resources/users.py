@@ -70,13 +70,34 @@ def login():
 	payload['email'] = payload['email'].lower()
 
 	try:
-		if (models.TeamMember.get(models.TeamMember.email == payload['email']) and models.TeamMember.get(models.TeamMember.username == payload['username'])):
+		user = models.TeamMember.get(models.TeamMember.username == payload['username'])
 
-			user = models.TeamMember.get(models.TeamMember.username == payload['username'])
 
-			user_dict = model_to_dict(user)
+		user_dict = model_to_dict(user)
+
+		if (user_dict['email'] == payload['email']):
 
 			password_matches = check_password_hash(user_dict['password'], payload['password'])
+
+			if (password_matches):
+				login_user(user)
+
+				user_dict.pop('password')
+
+				return jsonify(
+					data = user_dict,
+					message = f"Successfully logged in",
+					status = 200
+				), 200 
+
+			else:
+				print('Password doesn\'t match')
+
+				return jsonify(
+					data = {},
+					message = "password or email doesn't match",
+					status = 401
+				), 401
 
 		else:
 			print('username or email does not match records')
@@ -84,26 +105,6 @@ def login():
 			return jsonify(
 				data = {},
 				message = "Username and Email combination does not match any profiles",
-				status = 401
-			), 401
-
-		if (password_matches):
-			login_user(user)
-
-			user_dict.pop('password')
-
-			return jsonify(
-				data = user_dict,
-				message = f"Successfully logged in",
-				status = 200
-			), 200 
-
-		else:
-			print('Password doesn\'t match')
-
-			return jsonify(
-				data = {},
-				message = "password or email doesn't match",
 				status = 401
 			), 401
 
@@ -115,6 +116,18 @@ def login():
 			message = "Email or password is incorrect",
 			status = 401
 		), 401
+
+
+#LOGOUT
+@users.route('/logout', methods=['GET'])
+def logout():
+	logout_user()
+
+	return jsonify (
+		data = {},
+		status = 200,
+		message = 'user has been logged out'
+	), 200
 
 	
 
