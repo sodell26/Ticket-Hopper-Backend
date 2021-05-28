@@ -34,7 +34,7 @@ def tickets_index():
 def create_ticket():
 	payload = request.get_json()
 
-	new_ticket = models.Ticket.create(assigned_to=current_user.id, description=payload['description'], notes=payload['notes'])
+	new_ticket = models.Ticket.create(description=payload['description'], notes=payload['notes'], submitted_by = current_user.id)
 	print(new_ticket)
 
 	ticket_dict = model_to_dict(new_ticket)

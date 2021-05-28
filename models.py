@@ -16,12 +16,12 @@ class TeamMember(UserMixin, Model):
 
 	class Meta:
 		database = DATABASE
-		
+
 
 class Ticket(Model):
-	assigned_to = ForeignKeyField(TeamMember, backref = 'my_tickets') # change to a Foreign key after testing
+	assigned_to = CharField(null=True) # change to a Foreign key after testing
 	description = CharField()
-	submitted_by = CharField(null = True) # change to a Foreign key after testing
+	submitted_by = ForeignKeyField(TeamMember, backref = 'my_tickets') # change to a Foreign key after testing
 	notes = CharField()
 	open_ticket = BooleanField(default=True)
 	created = DateTimeField(default=datetime.datetime.now)
@@ -29,12 +29,18 @@ class Ticket(Model):
 	class Meta:
 		database = DATABASE
 
+class Team(Model):
+	members: ForeignKeyField(TeamMember)
+	name: CharField(unique=True)
+	active_tickets: ForeignKeyField(Ticket)
+
 #stretch - outside customers
 # class Customer(userMixin, Model):
 # 	username=CharField(unique=True)
 # 	email=CharField(unique=True)
 # 	password=CharField()
 # 	tickets=ForeignKeyField(Ticket, backref=)
+
 
 
 def initialize():
