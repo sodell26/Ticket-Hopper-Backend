@@ -29,10 +29,15 @@ class Ticket(Model):
 	class Meta:
 		database = DATABASE
 
+
+
 class Team(Model):
 	members: ForeignKeyField(TeamMember)
 	name: CharField(unique=True)
 	active_tickets: ForeignKeyField(Ticket)
+
+	class Meta:
+		database = DATABASE
 	
 
 #stretch - outside customers
@@ -47,7 +52,16 @@ class Team(Model):
 def initialize():
 	DATABASE.connect()
 
-	DATABASE.create_tables([TeamMember, Ticket], safe=True)
+	DATABASE.create_tables([TeamMember, Ticket, Team], safe=True)
 	print("Connected to DB and created tables if needed")
 
 	DATABASE.close()
+
+
+
+
+
+
+
+
+	

@@ -32,13 +32,20 @@ login_manager.init_app(app)
 def load_user(user_id):
 	return models.TeamMember.get(models.TeamMember.id == user_id)
 
+#CORS
+CORS(tickets, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(users, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(teams, origins=['http://localhost:3000'], supports_credentials=True)
+
+
 app.register_blueprint(tickets, url_prefix='/api/v1/tickets')
 app.register_blueprint(users, url_prefix='/api/v1/users')
 app.register_blueprint(teams, url_prefix='/api/v1/teams')
 
-@app.route('/')
-def index():
-	return 'hi'
+#testing 
+# @app.route('/')
+# def index():
+# 	return 'hi'
 
 if __name__ == '__main__':
 	models.initialize()
@@ -46,32 +53,3 @@ if __name__ == '__main__':
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-if __name__ == '__main__':
-	app.run(debug=DEBUG, port=PORT)

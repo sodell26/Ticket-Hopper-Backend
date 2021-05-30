@@ -31,7 +31,7 @@ def team_index():
 def create_team():
 	payload = request.get_json()
 
-	new_team = models.Team.create(description=payload['description'], notes=payload['notes'], submitted_by = current_user.id)
+	new_team = models.Team.create(name=payload['name'], members=current_user.id, active_tickets=current_user.my_tickets)
 	print(new_team)
 
 	team_dict = model_to_dict(new_team)
