@@ -33,6 +33,7 @@ class Team(Model):
 	members: ForeignKeyField(TeamMember)
 	name: CharField(unique=True)
 	active_tickets: ForeignKeyField(Ticket)
+	
 
 #stretch - outside customers
 # class Customer(userMixin, Model):

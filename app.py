@@ -33,6 +33,7 @@ def load_user(user_id):
 
 app.register_blueprint(tickets, url_prefix='/api/v1/tickets')
 app.register_blueprint(users, url_prefix='/api/v1/users')
+app.register_blueprint(teams, url_prefix='/api/v1/teams')
 
 @app.route('/')
 def index():
