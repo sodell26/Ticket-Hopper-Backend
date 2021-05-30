@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 
 from resources.tickets import tickets
 from resources.users import users
+from resources.teams import teams
 
 import models
 
