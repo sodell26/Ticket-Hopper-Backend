@@ -75,36 +75,25 @@ def login():
 
 		user_dict = model_to_dict(user)
 
-		if (user_dict['username'] == payload['username']):
+		password_matches = check_password_hash(user_dict['password'], payload['password'])
 
-			password_matches = check_password_hash(user_dict['password'], payload['password'])
+		if (password_matches):
+			login_user(user)
 
-			if (password_matches):
-				login_user(user)
+			user_dict.pop('password')
 
-				user_dict.pop('password')
-
-				return jsonify(
-					data = user_dict,
-					message = f"Successfully logged in",
-					status = 200
-				), 200 
-
-			else:
-				print('Password doesn\'t match')
-
-				return jsonify(
-					data = {},
-					message = "password or username doesn't match",
-					status = 401
-				), 401
+			return jsonify(
+				data = user_dict,
+				message = f"Successfully logged in",
+				status = 200
+			), 200 
 
 		else:
-			print('username does not match records')
+			print('Password doesn\'t match')
 
 			return jsonify(
 				data = {},
-				message = "Username does not match any profiles",
+				message = "password or username doesn't match",
 				status = 401
 			), 401
 

@@ -21,9 +21,7 @@ class TeamMember(UserMixin, Model):
 class Ticket(Model):
 	assigned_to = CharField(null=True) # change to a Foreign key after testing
 	description = CharField()
-	submitted_by = CharField(default="Sarah")
-	#ForeignKeyField(TeamMember, backref = 'my_tickets')
-	 # change to a Foreign key after testing
+	submitted_by = ForeignKeyField(TeamMember, backref = 'my_tickets')
 	notes = CharField()
 	open_ticket = BooleanField(default=True)
 	created = DateTimeField(default=datetime.datetime.now)

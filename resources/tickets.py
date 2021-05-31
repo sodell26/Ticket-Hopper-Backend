@@ -10,7 +10,7 @@ tickets = Blueprint('tickets', 'tickets')
 
 #index, GET route
 @tickets.route('/', methods=['GET'])
-
+# @login_required
 def tickets_index():
 	result = models.Ticket.select()
 	# print(result)
@@ -18,10 +18,10 @@ def tickets_index():
 	# for ticket in result:
 		# print(ticket.__data__)
 
-	# ticket_dicts = [model_to_dict(ticket) for ticket in current_user.my_tickets]
-	ticket_dicts = [model_to_dict(ticket) for ticket in result]
+	ticket_dicts = [model_to_dict(ticket) for ticket in current_user.my_tickets]
+	# ticket_dicts = [model_to_dict(ticket) for ticket in result]
 
-	# print(ticket_dicts)
+	print(ticket_dicts)
 	return jsonify({
 		'data': ticket_dicts,
 		'message': f"Successfully found {len(ticket_dicts)} tickets",
@@ -31,13 +31,13 @@ def tickets_index():
 
 #create,POST route
 @tickets.route('/', methods=['POST'])
-#@login_required
+@login_required
 
 def create_ticket():
 	payload = request.get_json()
 
-	new_ticket = models.Ticket.create(description=payload['description'], notes=payload['notes'])
-	#add submitted_by = current_user.id
+	new_ticket = models.Ticket.create(description=payload['description'], notes=payload['notes'], submitted_by=current_user.id)
+
 	print(new_ticket)
 
 	ticket_dict = model_to_dict(new_ticket)
