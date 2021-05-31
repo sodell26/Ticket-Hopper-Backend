@@ -67,7 +67,7 @@ def login():
 
 	payload = request.get_json()
 	payload['username'] = payload['username'].lower()
-	payload['email'] = payload['email'].lower()
+	# payload['email'] = payload['email'].lower()
 
 	try:
 		user = models.TeamMember.get(models.TeamMember.username == payload['username'])
@@ -75,7 +75,7 @@ def login():
 
 		user_dict = model_to_dict(user)
 
-		if (user_dict['email'] == payload['email']):
+		if (user_dict['username'] == payload['username']):
 
 			password_matches = check_password_hash(user_dict['password'], payload['password'])
 
@@ -95,16 +95,16 @@ def login():
 
 				return jsonify(
 					data = {},
-					message = "password or email doesn't match",
+					message = "password or username doesn't match",
 					status = 401
 				), 401
 
 		else:
-			print('username or email does not match records')
+			print('username does not match records')
 
 			return jsonify(
 				data = {},
-				message = "Username and Email combination does not match any profiles",
+				message = "Username does not match any profiles",
 				status = 401
 			), 401
 
@@ -113,7 +113,7 @@ def login():
 
 		return jsonify(
 			data = {}, 
-			message = "Email or password is incorrect",
+			message = "username or password is incorrect",
 			status = 401
 		), 401
 
