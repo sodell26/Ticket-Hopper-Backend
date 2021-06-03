@@ -32,6 +32,8 @@ def member_index(id):
 		.join(models.TeamMemberTeam)
 		.where(models.TeamMemberTeam.team == int(id)))
 
+
+
 	member_dict = [model_to_dict(team_member) for team_member in found_members]
 
 	return jsonify(
