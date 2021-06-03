@@ -122,6 +122,25 @@ def add_member(id, teamid):
 		status=201
 		), 201
 
+
+#get teams that a user is on
+@users.route('/<id>/myteams', methods=['GET'])
+def find_teams(id):
+
+	found_teams = (models.Team
+		.select()
+		.join(models.TeamMemberTeam)
+		.where(models.TeamMemberTeam.team_member == int(id)))
+
+	team_dict = [model_to_dict(team) for team in found_teams]
+
+	return jsonify(
+		data = team_dict,
+		message= "Found your teams",
+		status = 200
+	), 200
+
+
 #LOGOUT
 @users.route('/logout', methods=['GET'])
 def logout():

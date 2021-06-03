@@ -25,13 +25,13 @@ class TeamMember(UserMixin, Model):
 
 
 class Ticket(Model):
-	assigned_to = ForeignKeyField(TeamMember, backref='member_ticket') # change to a Foreign key after testing
+	assigned_to = ForeignKeyField(TeamMember, backref='member_ticket', null=True) # change to a Foreign key after testing
 	description = CharField()
 	submitted_by = ForeignKeyField(TeamMember, backref = 'my_tickets')
 	notes = CharField()
 	open_ticket = BooleanField(default=True)
 	created = DateTimeField(default=datetime.datetime.now)
-	team = ForeignKeyField(Team, backref = 'team_tickets')
+	team = ForeignKeyField(Team, backref = 'team_tickets', null=True)
 
 	class Meta:
 		database = DATABASE

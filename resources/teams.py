@@ -23,7 +23,7 @@ def team_index():
 		'status': 200
 		}), 200
 
-
+#GET teammembers on a team
 @teams.route('/<id>/teammembers', methods=['GET'])
 def member_index(id):
 
