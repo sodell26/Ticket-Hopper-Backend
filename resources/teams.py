@@ -24,6 +24,24 @@ def team_index():
 		}), 200
 
 
+@teams.route('/<id>/teammembers', methods=['GET'])
+def member_index(id):
+
+	found_members = (models.TeamMember
+		.select()
+		.join(models.TeamMemberTeam)
+		.where(models.TeamMemberTeam.team == int(id)))
+
+	member_dict = [model_to_dict(team_member) for team_member in found_members]
+
+	return jsonify(
+		data = member_dict,
+		message = "Found team members",
+		status = 200
+	), 200
+
+
+
 #create,POST route
 @teams.route('/', methods=['POST'])
 #@login_required
@@ -31,7 +49,7 @@ def team_index():
 def create_team():
 	payload = request.get_json()
 
-	new_team = models.Team.create(name=payload['name'], members=current_user.id, active_tickets=current_user.my_tickets)
+	new_team = models.Team.create(name=payload['name'])
 	print(new_team)
 
 	team_dict = model_to_dict(new_team)

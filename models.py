@@ -4,37 +4,42 @@ import datetime
 
 from flask_login import UserMixin
 
-DATABASE = SqliteDatabase('tickets.sqlite') # change to 
+DATABASE = SqliteDatabase('tickets.sqlite') # change to postgrel
+
+class Team(Model):
+	name = CharField(unique=True)
+	
+
+	class Meta:
+		database = DATABASE
+
 
 class TeamMember(UserMixin, Model):
 	username = CharField(unique=True)
 	email = CharField(unique=True)
 	password = CharField()
-	#Teams: have the Teams model refer back to this
-	#Tickets: same with this one
-	Manager = BooleanField(default=False) 
+	Manager = BooleanField(default=False)
 
 	class Meta:
 		database = DATABASE
 
 
 class Ticket(Model):
-	assigned_to = CharField(null=True) # change to a Foreign key after testing
+	assigned_to = ForeignKeyField(TeamMember, backref='member_ticket') # change to a Foreign key after testing
 	description = CharField()
 	submitted_by = ForeignKeyField(TeamMember, backref = 'my_tickets')
 	notes = CharField()
 	open_ticket = BooleanField(default=True)
 	created = DateTimeField(default=datetime.datetime.now)
+	team = ForeignKeyField(Team, backref = 'team_tickets')
 
 	class Meta:
 		database = DATABASE
 
 
-
-class Team(Model):
-	members: ForeignKeyField(TeamMember)
-	name: CharField(unique=True)
-	active_tickets: ForeignKeyField(Ticket)
+class TeamMemberTeam(Model):
+	team = ForeignKeyField(Team, backref='all_teams')
+	team_member = ForeignKeyField(TeamMember, backref='team_members')
 
 	class Meta:
 		database = DATABASE
@@ -52,7 +57,7 @@ class Team(Model):
 def initialize():
 	DATABASE.connect()
 
-	DATABASE.create_tables([TeamMember, Ticket, Team], safe=True)
+	DATABASE.create_tables([TeamMember, Ticket, Team, TeamMemberTeam], safe=True)
 	print("Connected to DB and created tables if needed")
 
 	DATABASE.close()

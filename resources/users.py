@@ -107,6 +107,21 @@ def login():
 		), 401
 
 
+#add teammember to a team
+@users.route('/<id>/team/<teamid>', methods=['POST'])
+def add_member(id, teamid):
+
+	all_together = models.TeamMemberTeam.create(team = int(teamid), team_member = int(id))
+
+	all_together_dict = model_to_dict(all_together)
+
+
+	return jsonify(
+		data = all_together_dict,
+		message = "added user to team",
+		status=201
+		), 201
+
 #LOGOUT
 @users.route('/logout', methods=['GET'])
 def logout():
