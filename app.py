@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, after_this_request
 
 from resources.tickets import tickets
 from resources.users import users
@@ -42,6 +42,19 @@ app.register_blueprint(tickets, url_prefix='/api/v1/tickets')
 app.register_blueprint(users, url_prefix='/api/v1/users')
 app.register_blueprint(teams, url_prefix='/api/v1/teams')
 
+@app.before_request 
+def before_request():
+
+    print("you should see this before each request") 
+    models.DATABASE.connect()
+
+    @after_this_request 
+    def after_request(response):
+        
+        print("you should see this after each request") 
+        models.DATABASE.close()
+        return response 
+
 #testing 
 # @app.route('/')
 # def index():
@@ -52,4 +65,6 @@ if __name__ == '__main__':
 	app.run(debug=DEBUG, port=PORT)
 
 
-
+if os.environ.get('FLASK_ENV') != 'development':
+  print('\non heroku!')
+  models.initialize()

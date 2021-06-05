@@ -1,10 +1,11 @@
 from peewee import *
-
+import os
+from playhouse.db_url import connect
 import datetime
 
 from flask_login import UserMixin
 
-DATABASE = SqliteDatabase('tickets.sqlite') # change to postgrel
+DATABASE = connect(os.environ.get('DATABASE_URL') or 'sqlite:///tickets.sqlite')
 
 class Team(Model):
 	name = CharField(unique=True)
